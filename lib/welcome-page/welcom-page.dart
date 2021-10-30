@@ -138,6 +138,7 @@ class _DemoPageState extends State<DemoPage> {
                       color: Color.fromRGBO(244, 207, 181, 1.0),
                       child: Text('hmm lets take a look on  some hair product', style: GoogleFonts.comfortaa(
                       fontSize: 12,
+                     
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),textAlign: TextAlign.right),

@@ -63,8 +63,7 @@ class ImageSliderItem extends StatelessWidget {
               child: Row(
 
                 children: [
-
-                  Text(" \$120",style: GoogleFonts.comfortaa( fontSize: 25,
+                  Text("\$120",style: GoogleFonts.comfortaa( fontSize: 25,
                       fontWeight: FontWeight.w600,
                       color:Colors.white ),),
                   Container(

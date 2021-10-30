@@ -31,7 +31,7 @@ class ProductItem extends StatelessWidget {
             width:200 ,
             child: Card(
               color: Color(0xfffcf1e9),
-              clipBehavior: Clip.antiAlias,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
               child:Image.asset('$imageUrl',fit: BoxFit.cover,),
               shape: RoundedRectangleBorder(
                 borderRadius:BorderRadius.circular(20) ,
