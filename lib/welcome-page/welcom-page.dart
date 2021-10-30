@@ -1,9 +1,11 @@
+import 'package:api_project/data/MyProvider.dart';
 import 'package:api_project/product-list-page/product-list.dart';
 import 'package:api_project/welcome-page/image-slider/image-slider.dart';
 import 'package:bubble/bubble.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class DemoPage extends StatefulWidget {
   @override
@@ -42,119 +44,138 @@ class _DemoPageState extends State<DemoPage> {
         ],
       ),
       backgroundColor: Color(0xfffcf1e9),
-      body:Column(
-        children: [
-          Expanded(
-            flex:3,
-            child: Container(
-              child: Column(
-                children: [
-
-                  Container(
-                    margin: EdgeInsets.fromLTRB(5, 12, 5, 5),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(7),
-                            child: Text(
-                              "moistrizing   ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+      body: Consumer<HomeProvider>(
+          builder: (context, provider, x) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                provider.allProducts == null
+                    ? Container(
+                        color: Colors.white,
+                        height: 200,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    :               
+               Expanded(
+			   flex:2 ,child:Container(
+                  height: 70,
+                  child: provider.allCategories == null
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: provider.allCategories
+                                .map((e) => GestureDetector(
+                                      onTap: () {
+                                        provider.getCategoryProducts(e);
+                                      },
+                                      child:Container(
+                              margin: EdgeInsets.all(5),
+                              child: Text(
+                                 e[0].toUpperCase() + e.substring(1),,
+                                style: GoogleFonts.comfortaa(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ))
+                                .toList(),
                           ),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Text(
-                                "cleaning     ",
-                                style: GoogleFonts.comfortaa(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Text(
-                                "creams     ",
-                                style: GoogleFonts.comfortaa(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Text(
-                                "vitamins     ",
-                                style: GoogleFonts.comfortaa(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Text(
-                                "hair    ",
-                                style: GoogleFonts.comfortaa(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Text(
-                                "shampoo    ",
-                                style: GoogleFonts.comfortaa(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                   // margin: EdgeInsets.fromLTRB(, 0, 0, 0),
-                    child: Bubble(
-                      margin: BubbleEdges.only(top: 10,left: 5),
-                      alignment: Alignment.topLeft,
-                      nip: BubbleNip.leftTop,
-                      color: Color.fromRGBO(244, 207, 181, 1.0),
-                      child: Text('hmm lets take a look on  some hair product', style: GoogleFonts.comfortaa(
-                      fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),textAlign: TextAlign.right),
-                    ),
-                  ),
-                  Container(
-                   // margin: EdgeInsets.fromLTRB(, 0, 0, 0),
-                    child: Bubble(
-                      margin: BubbleEdges.only(top: 10,left: 5),
-                      alignment: Alignment.topLeft,
-                      nip: BubbleNip.leftTop,
-                      color: Color.fromRGBO(244, 207, 181, 1.0),
-                      child: Text('hmm lets take a look on  some hair product', style: GoogleFonts.comfortaa(
-                      fontSize: 12,
-                     
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),textAlign: TextAlign.right),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-              flex:10,
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: ImageSlider())),
-        ],
-      ),
+                        ),
+                ),),
+                Expanded(
+                    flex:9,
+                    child: provider.categoryProducts == null
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Container(
+                            margin: EdgeInsets.all(10),
+                            child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10),
+                                itemCount: provider.categoryProducts.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      provider.getSpecificProduct(
+                                      provider.categoryProducts[index].id);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return ProductDetails();
+                                      }));
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      color: Colors.white,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: CachedNetworkImage(
+                                              imageUrl: provider
+                                                  .categoryProducts[index]
+                                                  .image,
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(provider
+                                                  .categoryProducts[index]
+                                                  .title),
+                                              Row(
+                                                children: [
+                                                  Text('Price: ' +
+                                                      provider
+                                                          .categoryProducts[
+                                                              index]
+                                                          .price
+                                                          .toString() +
+                                                      '\$'),
+                                                  Spacer(),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        provider.addToFavourite(
+                                                            provider.categoryProducts[
+                                                                index]);
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.favorite,
+                                                        color: provider
+                                                                    .favouriteProducts
+                                                                    ?.any((element) =>
+                                                                        element
+                                                                            .id ==
+                                                                        provider
+                                                                            .categoryProducts[index]
+                                                                            .id) ??
+                                                                false
+                                                            ? Colors.red
+                                                            : Colors.black,
+                                                      ))
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ))
+              ],
+               );
+          },
+               )
+
     );
   }
 }

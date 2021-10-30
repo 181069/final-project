@@ -17,5 +17,5 @@ void main() {
     ChangeNotifierProvider<HomeProvider>(
       create:(_) =>HomeProvider() ,
    child:MaterialApp(
-      home:CardPage() )));
+      home:DemoPage() )));
 }
