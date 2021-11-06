@@ -1,7 +1,8 @@
-import 'package:api_project/product-list-page/product-list.dart';
-
+import 'package:api_project/data/MyProvider.dart';
+import 'package:api_project/product-list-page/product-item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -40,7 +41,9 @@ class _ProductPageState extends State<ProductPage> {
         ],
       ),
       backgroundColor: Color(0xfffcf1e9),
-      body: Column(
+      body: Consumer<HomeProvider>(
+          builder: (context, provider, x) {
+             return Column(
         children: [
           Expanded(
             flex: 1,
@@ -52,65 +55,26 @@ class _ProductPageState extends State<ProductPage> {
                   margin:EdgeInsets.fromLTRB(5, 5, 5, 0),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
+                    child:ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: provider.allCategories.length,
+                      itemBuilder:(context,i){return  GestureDetector(
+                        onTap: (){                          
+                        provider.getCategoryProducts(provider.allCategories[i]);
+                                      
+                        },
+                        child: Container(
                           margin: EdgeInsets.all(7),
                           child: Text(
-                            "moistrizing   ",
+                            "${provider.allCategories[i]}  ",
                             style: GoogleFonts.comfortaa(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                              "cleaning     ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                              "creams     ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                              "vitamins     ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                              "hair    ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                              "shampoo    ",
-                              style: GoogleFonts.comfortaa(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )),
-                      ],
-                    ),
+                      );}
+                    ) ,
                   ),
                 )
               ],
@@ -120,12 +84,19 @@ class _ProductPageState extends State<ProductPage> {
             flex: 11,
             child: Container(
               // padding: EdgeInsets.fromLTRB(5,8, 5, 5),
-              child: ProductList(),
+              child: ListView.builder(
+                itemCount:provider.categoryProducts.length ,
+                itemBuilder:(context, i){
+                  return ProductItem(imageUrl: provider.categoryProducts[i].image, productName: provider.categoryProducts[i].title, productDescription: provider.categoryProducts[i].description, productPrice: provider.categoryProducts[i].price.toString());
+                },
+                ),
 
             ),
           ),
         ],
-      ),
+      );
+
+          }),
     );
   }
 }

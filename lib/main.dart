@@ -2,7 +2,6 @@
 import 'dart:html';
 
 import 'package:api_project/product-list-page/products-page.dart';
-import 'package:api_project/welcome-page/image-slider/image-slider.dart';
 import 'package:api_project/welcome-page/welcom-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,5 +16,5 @@ void main() {
     ChangeNotifierProvider<HomeProvider>(
       create:(_) =>HomeProvider() ,
    child:MaterialApp(
-      home:DemoPage() )));
+      home:WelcomePage() )));
 }

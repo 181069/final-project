@@ -1,11 +1,9 @@
 import 'dart:html';
-
 import 'package:api_project/card-page/card-item.dart';
 import 'package:api_project/data/MyProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import 'CardItemClass.dart';
 
 class CardPage extends StatefulWidget {
@@ -14,13 +12,6 @@ class CardPage extends StatefulWidget {
 }
 
 class _CardPageState extends State<CardPage> {
-  CardItemData card = CardItemData(
-      productName: "fatima",
-      productPrice: "5",
-      productDescription: "israa abd mariam",
-      imageUrl: 'assets/images/cream.jpeg',
-      productIsFaviorite: true,
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +45,9 @@ class _CardPageState extends State<CardPage> {
         ],
       ),
       backgroundColor: Color(0xffe6b8a2).withOpacity(.2),
-      body: Column(
+      body: Consumer<HomeProvider>(
+          builder: (context, provider, x) { return 
+        Column(
         children: [
           Expanded(
               flex: 1,
@@ -77,19 +70,12 @@ class _CardPageState extends State<CardPage> {
               )),
           Expanded(
             flex: 10,
-            child: ListView(
-              children: [
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-                CardItem(card),
-              ],
-            ),
+            child: ListView.builder(
+              itemCount: provider.cartProducts.length,
+              itemBuilder:(context, i){
+               return CardItem(provider.cartProducts[i]); 
+              } ,  
+              )
           ),
           Expanded(
             flex: 2,
@@ -156,6 +142,7 @@ class _CardPageState extends State<CardPage> {
           )
         ],
       ),
-    );
+          })
+    
   }
 }
